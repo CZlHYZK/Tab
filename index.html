@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>tab组件封装</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    .container {
+      position: relative;
+      width: 1000px;
+      margin: 10px auto;
+      border: 1px grey solid;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .container .tab-header {
+      border-bottom: 1px solid grey;
+    }
+
+    .container .tab-header li {
+      display: inline-block;
+      padding: 10px 15px;
+    }
+
+    .tab-header-active {
+      border: 1px solid grey;
+      border-bottom: 1px solid white;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      margin-bottom: -1px;
+    }
+
+    .container .tab-content {
+      margin-top: 15px;
+      width: 100%;
+      height: 100px;
+    }
+
+    .container .tab-content li {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .tab-content-active {
+      display: block !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <ul class="tab-header">
+      <li class="tab-header-active">title1</li>
+      <li>title2</li>
+      <li>title3</li>
+      <li>title4</li>
+    </ul>
+    <ul class="tab-content">
+      <li class="tab-content-active">content1</li>
+      <li>content2</li>
+      <li>content3</li>
+      <li>content4</li>
+    </ul>
+  </div>
+
+  <div class="container container1">
+      <ul class="tab-header">
+        <li class="tab-header-active">title1</li>
+        <li>title2</li>
+        <li>title3</li>
+      </ul>
+      <ul class="tab-content">
+        <li class="tab-content-active">content1</li>
+        <li>content2</li>
+        <li>content3</li>
+      </ul>
+    </div>
+  <script>
+      function Tab(ct) {
+        this.ct = ct;
+        this.tabHeader = ct.querySelectorAll(".tab-header")[0];
+        this.tabContent = ct.querySelectorAll(".tab-content")[0];
+      }
+      Tab.prototype.bind=function(){
+        var _this=this;
+        this.tabHeader.addEventListener("click",function(e){
+          if(e.target.tagName.toLowerCase()==="li"){
+            var index=[].indexOf.call(_this.tabHeader.querySelectorAll("li"),e.target);
+            _this.tabHeader.querySelectorAll("li").forEach(function(ele,index){
+              ele.classList.remove("tab-header-active");
+            });
+            _this.tabContent.querySelectorAll("li").forEach(function(ele,index){
+              ele.classList.remove("tab-content-active");
+            });
+            e.target.classList.add("tab-header-active");
+            _this.tabContent.querySelectorAll("li")[index].classList.add("tab-content-active");
+          }
+        });
+      }
+      var newTab=(function(){
+        return {
+          init:function(ct){
+            ct.forEach(function(ele){
+              (new Tab(ele)).bind();
+            });
+          }
+        }
+      })();
+      newTab.init(document.querySelectorAll(".container"));
+  </script>
+</body>
+
+</html>
